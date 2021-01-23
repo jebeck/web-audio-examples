@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "web-audio-machines": {
+      "signature": "f4e3d00916604b42a75cb762e5c16a81",
+      "file": true
+    }
+  }
+}

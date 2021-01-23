@@ -1,0 +1,86 @@
+{
+  "name": "web-audio-machines",
+  "version": "0.0.0+f4e3d009",
+  "description": "State machines for the Web Audio and Web MIDI APIs",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "scripts": {
+    "build": "rimraf dist && npm run build-lib && npm run build-modules && npm run build-umd",
+    "build-lib": "webpack --config webpack.lib.config.js",
+    "build-modules": "rimraf dist/esm && rollup -c",
+    "build-umd": "rollup -c rollup.umd.config.js",
+    "dev": "nodemon -w src/ -w lib/ -x 'npm run publish-local'",
+    "lint": "eslint src/*.js src/**/*.js",
+    "prepublishOnly": "npm run build",
+    "publish-local": "yalc publish --push"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jebeck/web-audio-machines.git"
+  },
+  "keywords": [
+    "audio",
+    "finite state machines",
+    "keyboard",
+    "MIDI",
+    "oscilloscope",
+    "statecharts",
+    "state machines",
+    "Web Audio",
+    "Web MIDI"
+  ],
+  "author": "Jana E. Beck",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jebeck/web-audio-machines/issues"
+  },
+  "homepage": "https://github.com/jebeck/web-audio-machines#readme",
+  "babel": {
+    "plugins": [
+      "@babel/plugin-proposal-object-rest-spread"
+    ],
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "eslintConfig": {
+    "env": {
+      "browser": true,
+      "es6": true
+    },
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended",
+      "prettier"
+    ],
+    "parser": "babel-eslint",
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "yalcSig": "f4e3d00916604b42a75cb762e5c16a81"
+}
