@@ -2,7 +2,7 @@
   "version": "v1",
   "packages": {
     "web-audio-machines": {
-      "signature": "f4e3d00916604b42a75cb762e5c16a81",
+      "signature": "ee4b12800fdc67dc6be070ce5e4370a6",
       "file": true
     }
   }

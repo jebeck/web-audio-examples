@@ -3,20 +3,28 @@ export default async function connectToAudioInput(
   { audioCtx },
   { destination }
 ) {
-  const analyser = audioCtx.createAnalyser();
-  const target = destination || audioCtx.destination;
+  const analyser = audioCtx.node.createAnalyser();
+  const target = destination || audioCtx.node.destination;
   analyser.connect(target);
 
   try {
     const userStream = await navigator.mediaDevices.getUserMedia({
       audio: true,
     });
-    const stream = audioCtx.createMediaStreamSource(userStream);
+    const stream = audioCtx.node.createMediaStreamSource(userStream);
     stream.connect(analyser);
-    console.log('Hi there!');
     return Promise.resolve({
       name: 'userAudioAnalyser',
-      children: [{ name: 'userAudio' }],
+      node: analyser,
+      type: 'AnalyserNode',
+      children: [
+        {
+          name: 'userAudio',
+          node: stream,
+          type: 'MediaStreamAudioSourceNode',
+          children: [],
+        },
+      ],
     });
   } catch (err) {
     return Promise.reject({ error: err });

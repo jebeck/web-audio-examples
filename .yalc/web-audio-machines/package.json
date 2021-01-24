@@ -1,6 +1,6 @@
 {
   "name": "web-audio-machines",
-  "version": "0.0.0+f4e3d009",
+  "version": "0.0.0+ee4b1280",
   "description": "State machines for the Web Audio and Web MIDI APIs",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -10,7 +10,7 @@
     "build-modules": "rimraf dist/esm && rollup -c",
     "build-umd": "rollup -c rollup.umd.config.js",
     "dev": "nodemon -w src/ -w lib/ -x 'npm run publish-local'",
-    "lint": "eslint src/*.js src/**/*.js",
+    "lint": "eslint lib/*.js lib/**/*.js src/*.js src/**/*.js",
     "prepublishOnly": "npm run build",
     "publish-local": "yalc publish --push"
   },
@@ -63,11 +63,18 @@
     },
     "extends": [
       "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:react-hooks/recommended",
-      "prettier"
+      "prettier",
+      "react-app"
     ],
     "parser": "babel-eslint",
+    "plugins": [
+      "react",
+      "react-hooks"
+    ],
+    "rules": {
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn"
+    },
     "settings": {
       "react": {
         "version": "detect"
@@ -82,5 +89,5 @@
   "prettier": {
     "singleQuote": true
   },
-  "yalcSig": "f4e3d00916604b42a75cb762e5c16a81"
+  "yalcSig": "ee4b12800fdc67dc6be070ce5e4370a6"
 }

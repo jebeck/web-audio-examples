@@ -6,7 +6,7 @@ export default {
   external: baseConfig.external,
   input: 'src/index.js',
   output: {
-    file: 'dist/web-audio-hooks.js',
+    file: 'dist/web-audio-machines.js',
     format: 'umd',
     globals: {
       'prop-types': 'prop-types',

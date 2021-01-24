@@ -1,6 +1,7 @@
 import { assign, Machine } from 'xstate';
 
 import { connectToAudioInput } from './services/index';
+import { localLog } from './actions';
 
 const AUDIO_CTX_STATES_TO_CURRENTLY_PLAYING = {
   closed: false,
@@ -14,8 +15,12 @@ export default function createWebAudioMachine() {
   return Machine(
     {
       context: {
-        audioCtx,
-        graph: { name: 'audioCtx', children: [] },
+        audioCtx: {
+          name: 'audioCtx',
+          node: audioCtx,
+          type: 'AudioContext',
+          children: [],
+        },
         isCurrentlyPlaying:
           AUDIO_CTX_STATES_TO_CURRENTLY_PLAYING?.[audioCtx.state],
       },
@@ -35,12 +40,17 @@ export default function createWebAudioMachine() {
             },
           },
         },
+        error: {},
         connectingToAudioInput: {
           invoke: {
             id: 'connectToAudioInput',
             src: 'connectToAudioInput',
             onDone: {
+              actions: ['log', 'addAudioGraphChild'],
               target: 'base',
+            },
+            onError: {
+              target: 'error',
             },
           },
         },
@@ -49,7 +59,7 @@ export default function createWebAudioMachine() {
             id: 'resume',
             src: 'resume',
             onDone: {
-              actions: 'updateCurrentlyPlaying',
+              actions: ['log', 'updateCurrentlyPlaying'],
               target: 'base',
             },
           },
@@ -59,7 +69,7 @@ export default function createWebAudioMachine() {
             id: 'suspend',
             src: 'suspend',
             onDone: {
-              actions: 'updateCurrentlyPlaying',
+              actions: ['log', 'updateCurrentlyPlaying'],
               target: 'base',
             },
           },
@@ -68,15 +78,22 @@ export default function createWebAudioMachine() {
     },
     {
       actions: {
+        addAudioGraphChild: assign({
+          audioCtx: ({ audioCtx }, evt) => {
+            audioCtx.children = [...audioCtx.children, evt.data];
+            return audioCtx;
+          },
+        }),
+        log: localLog,
         updateCurrentlyPlaying: assign({
           isCurrentlyPlaying: ({ audioCtx }) =>
-            AUDIO_CTX_STATES_TO_CURRENTLY_PLAYING?.[audioCtx?.state],
+            AUDIO_CTX_STATES_TO_CURRENTLY_PLAYING?.[audioCtx.node.state],
         }),
       },
       services: {
         connectToAudioInput,
-        resume: ({ audioCtx }) => audioCtx.resume(),
-        suspend: ({ audioCtx }) => audioCtx.suspend(),
+        resume: ({ audioCtx }) => audioCtx.node.resume(),
+        suspend: ({ audioCtx }) => audioCtx.node.suspend(),
       },
     }
   );

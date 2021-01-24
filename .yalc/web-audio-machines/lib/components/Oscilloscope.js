@@ -1,16 +1,11 @@
-import React, { Fragment, useRef } from 'react';
+import React, { Fragment, useMemo, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-import { useTimeDomainData } from '../../src/hooks/useTimeDomainData';
+import { useTimeDomainData } from '../../src/index';
 
 import OscilloscopeWorker from '../workers/Oscilloscope.worker';
 
-function Oscilloscope({ analyser, canvasRef, ...rest }) {
-  const workerOptions = ['bg', 'stroke'].reduce((acc, key) => {
-    acc[key] = rest?.[key] || colors?.[rest?.theme || 'dark']?.[key];
-    return acc;
-  }, {});
-
+function Oscilloscope({ analyser, canvasRef, workerOptions }) {
   useTimeDomainData({
     analyser,
     canvasRef,
@@ -21,20 +16,30 @@ function Oscilloscope({ analyser, canvasRef, ...rest }) {
   return null;
 }
 
-const colors = {
-  light: {
-    bg: 'ghostwhite',
-    stroke: 'black',
-  },
-  dark: {
-    bg: '#424242',
-    stroke: 'deeppink',
-  },
+Oscilloscope.propTypes = {
+  analyser: PropTypes.object.isRequired,
+  canvasRef: PropTypes.shape({
+    current: PropTypes.instanceOf(Element),
+  }),
+  workerOptions: PropTypes.shape({
+    bg: PropTypes.string.isRequired,
+    stroke: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 function OscilloscopeContainer(props) {
-  const { absolute, height = 180, position, width = 320 } = props;
+  const {
+    absolute,
+    analyser,
+    bg,
+    height = 180,
+    position,
+    stroke,
+    width = 320,
+  } = props;
   const canvasRef = useRef();
+  const workerOptions = useMemo(() => ({ bg, stroke }), [bg, stroke]);
+
   return (
     <Fragment>
       <canvas
@@ -48,18 +53,25 @@ function OscilloscopeContainer(props) {
           ...position,
         }}
       />
-      <Oscilloscope canvasRef={canvasRef} {...props} />
+      <Oscilloscope
+        analyser={analyser}
+        canvasRef={canvasRef}
+        workerOptions={workerOptions}
+      />
     </Fragment>
   );
 }
 
 OscilloscopeContainer.defaultProps = {
   absolute: true,
+  bg: 'AliceBlue',
+  stroke: 'Grey',
 };
 
 OscilloscopeContainer.propTypes = {
-  absolute: PropTypes.bool,
-  analyser: PropTypes.object,
+  absolute: PropTypes.bool.isRequired,
+  analyser: PropTypes.object.isRequired,
+  bg: PropTypes.string.isRequired,
   height: PropTypes.number,
   position: PropTypes.shape({
     top: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -67,6 +79,7 @@ OscilloscopeContainer.propTypes = {
     bottom: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     left: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   }),
+  stroke: PropTypes.string.isRequired,
   width: PropTypes.number,
 };
 

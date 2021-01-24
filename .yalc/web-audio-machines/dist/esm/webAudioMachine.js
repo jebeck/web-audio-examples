@@ -1,5 +1,7 @@
+import { _ as _toConsumableArray } from './_rollupPluginBabelHelpers-f5b198ee.js';
 import { Machine, assign } from 'xstate';
 import connectToAudioInput from './services/connectToAudioInput.js';
+import { localLog } from './actions.js';
 
 var AUDIO_CTX_STATES_TO_CURRENTLY_PLAYING = {
   closed: false,
@@ -11,9 +13,10 @@ function createWebAudioMachine() {
   return Machine(
     {
       context: {
-        audioCtx: audioCtx,
-        graph: {
+        audioCtx: {
           name: 'audioCtx',
+          node: audioCtx,
+          type: 'AudioContext',
           children: [],
         },
         isCurrentlyPlaying:
@@ -38,12 +41,17 @@ function createWebAudioMachine() {
             },
           },
         },
+        error: {},
         connectingToAudioInput: {
           invoke: {
             id: 'connectToAudioInput',
             src: 'connectToAudioInput',
             onDone: {
+              actions: ['log', 'addAudioGraphChild'],
               target: 'base',
+            },
+            onError: {
+              target: 'error',
             },
           },
         },
@@ -52,7 +60,7 @@ function createWebAudioMachine() {
             id: 'resume',
             src: 'resume',
             onDone: {
-              actions: 'updateCurrentlyPlaying',
+              actions: ['log', 'updateCurrentlyPlaying'],
               target: 'base',
             },
           },
@@ -62,7 +70,7 @@ function createWebAudioMachine() {
             id: 'suspend',
             src: 'suspend',
             onDone: {
-              actions: 'updateCurrentlyPlaying',
+              actions: ['log', 'updateCurrentlyPlaying'],
               target: 'base',
             },
           },
@@ -71,29 +79,36 @@ function createWebAudioMachine() {
     },
     {
       actions: {
+        addAudioGraphChild: assign({
+          audioCtx: function audioCtx(_ref, evt) {
+            var _audioCtx = _ref.audioCtx;
+            _audioCtx.children = [].concat(
+              _toConsumableArray(_audioCtx.children),
+              [evt.data]
+            );
+            return _audioCtx;
+          },
+        }),
+        log: localLog,
         updateCurrentlyPlaying: assign({
-          isCurrentlyPlaying: function isCurrentlyPlaying(_ref) {
-            var audioCtx = _ref.audioCtx;
+          isCurrentlyPlaying: function isCurrentlyPlaying(_ref2) {
+            var audioCtx = _ref2.audioCtx;
             return AUDIO_CTX_STATES_TO_CURRENTLY_PLAYING === null ||
               AUDIO_CTX_STATES_TO_CURRENTLY_PLAYING === void 0
               ? void 0
-              : AUDIO_CTX_STATES_TO_CURRENTLY_PLAYING[
-                  audioCtx === null || audioCtx === void 0
-                    ? void 0
-                    : audioCtx.state
-                ];
+              : AUDIO_CTX_STATES_TO_CURRENTLY_PLAYING[audioCtx.node.state];
           },
         }),
       },
       services: {
         connectToAudioInput: connectToAudioInput,
-        resume: function resume(_ref2) {
-          var audioCtx = _ref2.audioCtx;
-          return audioCtx.resume();
-        },
-        suspend: function suspend(_ref3) {
+        resume: function resume(_ref3) {
           var audioCtx = _ref3.audioCtx;
-          return audioCtx.suspend();
+          return audioCtx.node.resume();
+        },
+        suspend: function suspend(_ref4) {
+          var audioCtx = _ref4.audioCtx;
+          return audioCtx.node.suspend();
         },
       },
     }
