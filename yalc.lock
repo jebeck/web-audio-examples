@@ -1,8 +1,8 @@
 {
   "version": "v1",
   "packages": {
-    "web-audio-machines": {
-      "signature": "ee4b12800fdc67dc6be070ce5e4370a6",
+    "web-audio-tools": {
+      "signature": "0893077a55895054e1ad678e92067de7",
       "file": true
     }
   }

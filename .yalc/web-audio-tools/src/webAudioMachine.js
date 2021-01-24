@@ -11,6 +11,7 @@ const AUDIO_CTX_STATES_TO_CURRENTLY_PLAYING = {
 
 export default function createWebAudioMachine() {
   const audioCtx = new AudioContext();
+  audioCtx.suspend();
 
   return Machine(
     {

@@ -4,9 +4,9 @@ import { useMachine } from '@xstate/react';
 import { Box, Typography } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
 
-import { Oscilloscope } from 'web-audio-machines/dist/lib/';
+import { Oscilloscope } from 'web-audio-tools/dist/lib/';
 
-import { createWebAudioMachine } from 'web-audio-machines';
+import { createWebAudioMachine } from 'web-audio-tools';
 
 import Layout from '../components/Layout';
 import PlayToggle from '../components/PlayToggle';

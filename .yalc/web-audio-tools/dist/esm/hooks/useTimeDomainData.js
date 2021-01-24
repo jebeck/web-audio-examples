@@ -5,7 +5,6 @@ function useTimeDomainData(_ref) {
     canvasRef = _ref.canvasRef,
     Worker = _ref.Worker,
     workerOptions = _ref.workerOptions;
-  console.log(workerOptions);
   var animationFrameRef = useRef();
   var workerRef = useRef();
 

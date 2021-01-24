@@ -18,7 +18,7 @@
     "teoria": "^2.5.0",
     "typescript": "^4.1.3",
     "uuid": "^8.3.2",
-    "web-audio-machines": "file:.yalc/web-audio-machines",
+    "web-audio-tools": "file:.yalc/web-audio-tools",
     "webmidi": "^2.5.1",
     "xstate": "^4.16.0"
   },

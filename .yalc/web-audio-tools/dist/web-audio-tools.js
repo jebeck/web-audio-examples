@@ -5,7 +5,7 @@
     ? define(['exports', 'xstate', 'react'], factory)
     : ((global =
         typeof globalThis !== 'undefined' ? globalThis : global || self),
-      factory((global.webAudioMachines = {}), global.xstate, global.react));
+      factory((global.webAudioTools = {}), global.xstate, global.react));
 })(this, function (exports, xstate, react) {
   'use strict';
 
@@ -177,6 +177,7 @@
   };
   function createWebAudioMachine() {
     var audioCtx = new AudioContext();
+    audioCtx.suspend();
     return xstate.Machine(
       {
         context: {
@@ -287,7 +288,6 @@
       canvasRef = _ref.canvasRef,
       Worker = _ref.Worker,
       workerOptions = _ref.workerOptions;
-    console.log(workerOptions);
     var animationFrameRef = react.useRef();
     var workerRef = react.useRef();
 

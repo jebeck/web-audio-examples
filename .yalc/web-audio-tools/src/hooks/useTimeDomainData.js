@@ -6,7 +6,6 @@ export default function useTimeDomainData({
   Worker,
   workerOptions,
 }) {
-  console.log(workerOptions);
   const animationFrameRef = useRef();
   const workerRef = useRef();
 

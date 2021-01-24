@@ -1,6 +1,6 @@
 {
-  "name": "web-audio-machines",
-  "version": "0.0.0+ee4b1280",
+  "name": "web-audio-tools",
+  "version": "0.0.0+0893077a",
   "description": "State machines for the Web Audio and Web MIDI APIs",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -89,5 +89,5 @@
   "prettier": {
     "singleQuote": true
   },
-  "yalcSig": "ee4b12800fdc67dc6be070ce5e4370a6"
+  "yalcSig": "0893077a55895054e1ad678e92067de7"
 }

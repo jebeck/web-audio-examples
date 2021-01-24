@@ -1,3 +1,5 @@
+/* eslint-disable import/no-anonymous-default-export */
+
 import babel from 'rollup-plugin-babel';
 import multi from 'rollup-plugin-multi-input';
 

@@ -1,6 +1,8 @@
-import { _ as _toConsumableArray } from './_rollupPluginBabelHelpers-f5b198ee.js';
+import {
+  _ as _toConsumableArray,
+  c as connectToAudioInput,
+} from './connectToAudioInput-b1af71ab.js';
 import { Machine, assign } from 'xstate';
-import connectToAudioInput from './services/connectToAudioInput.js';
 import { localLog } from './actions.js';
 
 var AUDIO_CTX_STATES_TO_CURRENTLY_PLAYING = {
@@ -10,6 +12,7 @@ var AUDIO_CTX_STATES_TO_CURRENTLY_PLAYING = {
 };
 function createWebAudioMachine() {
   var audioCtx = new AudioContext();
+  audioCtx.suspend();
   return Machine(
     {
       context: {
